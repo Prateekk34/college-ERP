@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">Subject Profile</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Name</th>
+                        <td>{{ subject.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Code</th>
+                        <td>{{ subject.code }}</td>
+                    </tr>
+                    <tr>
+                        <th>Course</th>
+                        <td>{{ subject.course }}</td>
+                    </tr>
+                    <tr>
+                        <th>Faculty</th>
+                        <td>{{ subject.faculty }}</td>
+                    </tr>
+                </table>
+
+                <a href="/subjects/edit/{{ subject.id }}/" class="btn btn-warning">Edit</a>
+                <a href="/subjects/delete/{{ subject.id }}/" class="btn btn-danger">Delete</a>
+                <a href="/subjects/" class="btn btn-secondary">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

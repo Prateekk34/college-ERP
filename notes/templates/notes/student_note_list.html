@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}My Notes{% endblock %}
+{% block page_title %}My Notes{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h4 class="mb-3">Subject Notes</h4>
+
+    {% if notes %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Subject</th>
+                        <th>Faculty</th>
+                        <th>Course</th>
+                        <th>Semester</th>
+                        <th>Section</th>
+                        <th>File</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for note in notes %}
+                    <tr>
+                        <td>{{ note.title }}</td>
+                        <td>{{ note.subject_assignment.subject.name }}</td>
+                        <td>{{ note.faculty.name|default:"-" }}</td>
+                        <td>{{ note.subject_assignment.course }}</td>
+                        <td>{{ note.subject_assignment.semester }}</td>
+                        <td>{{ note.subject_assignment.section|default:"-" }}</td>
+                        <td>
+                            <a href="{{ note.file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted mb-0">No notes available.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Add Exam Type{% endblock %}
+{% block page_title %}Add Exam Type{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h4 class="mb-3">Add Exam Type</h4>
+
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="{% url 'exam_type_list' %}" class="btn btn-secondary">Back</a>
+    </form>
+</div>
+{% endblock %}

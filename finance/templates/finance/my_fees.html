@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}My Fees{% endblock %}
+{% block page_title %}My Fees{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h4 class="mb-3">My Fee Records</h4>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Academic Year</th>
+                    <th>Year</th>
+                    <th>Semester</th>
+                    <th>Total</th>
+                    <th>Paid</th>
+                    <th>Pending</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.academic_year }}</td>
+                    <td>{{ item.year }}</td>
+                    <td>{{ item.semester|default:"-" }}</td>
+                    <td>{{ item.total_payable }}</td>
+                    <td>{{ item.total_paid }}</td>
+                    <td>{{ item.pending_amount }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="text-center text-muted">No fee data found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

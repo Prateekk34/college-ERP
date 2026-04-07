@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Attendance Dashboard{% endblock %}
+{% block page_title %}Attendance Dashboard{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Total Records</h6>
+            <h2 class="text-primary">{{ total_records }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Total Present</h6>
+            <h2 class="text-success">{{ total_present }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Total Absent</h6>
+            <h2 class="text-danger">{{ total_absent }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Overall Percentage</h6>
+            <h2 class="text-info">{{ overall_percentage|floatformat:2 }}%</h2>
+        </div>
+    </div>
+</div>
+
+{% if request.user.is_superuser or request.user.role == 'faculty' %}
+<div class="page-card mt-4">
+    <h5 class="mb-3">Quick Actions</h5>
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{% url 'attendance_list' %}" class="btn btn-outline-primary">Attendance List</a>
+        <a href="{% url 'add_attendance' %}" class="btn btn-outline-success">Add Attendance</a>
+        <a href="{% url 'mark_class_attendance' %}" class="btn btn-outline-dark">Mark Class Attendance</a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

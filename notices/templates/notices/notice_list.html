@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Notices{% endblock %}
+{% block page_title %}Notices{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Notices</h4>
+
+        {% if request.user.is_superuser or request.user.role == "admin" %}
+            <a href="{% url 'notice_add' %}" class="btn btn-primary">Add Notice</a>
+        {% endif %}
+    </div>
+
+    {% if notices %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Target</th>
+                        <th>Department</th>
+                        <th>Course</th>
+                        <th>Publish Date</th>
+                        <th>Expiry Date</th>
+                        {% if request.user.is_superuser or request.user.role == "admin" %}
+                            <th>Actions</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for notice in notices %}
+                    <tr>
+                        <td>
+                            <strong>{{ notice.title }}</strong><br>
+                            <small>{{ notice.message|truncatechars:120 }}</small>
+                        </td>
+                        <td>{{ notice.get_target_display }}</td>
+                        <td>{{ notice.department|default:"All" }}</td>
+                        <td>{{ notice.course|default:"All" }}</td>
+                        <td>{{ notice.publish_date }}</td>
+                        <td>{{ notice.expiry_date|default:"-" }}</td>
+
+                        {% if request.user.is_superuser or request.user.role == "admin" %}
+                        <td>
+                            <a href="{% url 'notice_edit' notice.id %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'notice_delete' notice.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted mb-0">No notices found.</p>
+    {% endif %}
+</div>
+{% endblock %}

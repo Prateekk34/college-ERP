@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Department{% endblock %}
+{% block page_title %}Delete Department{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h4 class="mb-3 text-danger">Delete Department</h4>
+
+    <p>Are you sure you want to delete <strong>{{ department.name }}</strong>?</p>
+
+    {% if related_courses_count or related_faculty_count or related_students_count or related_assignments_count %}
+        <div class="alert alert-warning">
+            <strong>This department cannot be deleted right now.</strong><br>
+            Linked Courses: {{ related_courses_count }}<br>
+            Linked Faculty: {{ related_faculty_count }}<br>
+            Linked Students: {{ related_students_count }}<br>
+            Linked Subject Assignments: {{ related_assignments_count }}
+        </div>
+        <a href="{% url 'department_profile' department.id %}" class="btn btn-secondary">Back</a>
+    {% else %}
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{% url 'department_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

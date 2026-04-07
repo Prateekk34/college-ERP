@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Timetable{% endblock %}
+{% block page_title %}Delete Timetable{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h4 class="mb-3">Delete Timetable</h4>
+    <p>Are you sure you want to delete this timetable entry?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{% url 'timetable_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

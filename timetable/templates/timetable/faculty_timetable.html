@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}My Timetable{% endblock %}
+{% block page_title %}My Timetable{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h4 class="mb-3">Faculty Timetable</h4>
+
+    {% if timetables %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Lecture</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Course</th>
+                        <th>Semester</th>
+                        <th>Section</th>
+                        <th>Subject</th>
+                        <th>Room</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in timetables %}
+                    <tr>
+                        <td>{{ item.day }}</td>
+                        <td>{{ item.lecture_number }}</td>
+                        <td>{{ item.start_time }}</td>
+                        <td>{{ item.end_time }}</td>
+                        <td>{{ item.subject_assignment.course }}</td>
+                        <td>{{ item.subject_assignment.semester }}</td>
+                        <td>{{ item.subject_assignment.section|default:"-" }}</td>
+                        <td>{{ item.subject_assignment.subject.name }}</td>
+                        <td>{{ item.room|default:"-" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted mb-0">No timetable entries found.</p>
+    {% endif %}
+</div>
+{% endblock %}

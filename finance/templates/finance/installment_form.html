@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{% if is_edit %}Edit Installment{% else %}Add Installment{% endif %}{% endblock %}
+{% block page_title %}{% if is_edit %}Edit Installment{% else %}Add Installment{% endif %}{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h4 class="mb-3">{{ student_fee.student.name }} - Installment</h4>
+    <p><strong>Pending Fee:</strong> {{ student_fee.pending_amount }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="text-danger small">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="{% url 'student_fee_detail' student_fee.id %}" class="btn btn-secondary">Back</a>
+    </form>
+</div>
+{% endblock %}

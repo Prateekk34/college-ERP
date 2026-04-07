@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Course List</h2>
+    <a href="/courses/add/" class="btn btn-primary">Add Course</a>
+</div>
+
+<form method="GET" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <input type="text" name="q" class="form-control" placeholder="Search Course" value="{{ request.GET.q }}">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-dark">Search</button>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Department</th>
+                <th>Faculty</th>
+                <th>Duration</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for course in courses %}
+            <tr>
+                <td>{{ course.id }}</td>
+                <td>{{ course.name }}</td>
+                <td>{{ course.code }}</td>
+                <td>{{ course.department }}</td>
+                <td>{{ course.faculty }}</td>
+                <td>{{ course.duration }}</td>
+                <td>
+                    <a href="/courses/profile/{{ course.id }}/" class="btn btn-info btn-sm">View</a>
+                    <a href="/courses/edit/{{ course.id }}/" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="/courses/delete/{{ course.id }}/" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No courses found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<nav>
+    <ul class="pagination">
+        {% if courses.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ courses.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Previous</a>
+            </li>
+        {% endif %}
+
+        <li class="page-item disabled">
+            <span class="page-link">Page {{ courses.number }} of {{ courses.paginator.num_pages }}</span>
+        </li>
+
+        {% if courses.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ courses.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ courses.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Last</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% endblock %}

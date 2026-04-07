@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Dashboard{% endblock %}
+{% block page_title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>My Subjects</h6>
+            <h2 class="text-primary">{{ subject_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Attendance Records</h6>
+            <h2 class="text-success">{{ attendance_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Results</h6>
+            <h2 class="text-warning">{{ result_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Fees</h6>
+            <h2 class="text-danger">{{ fee_count }}</h2>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="page-card">
+                <h5 class="mb-3">Latest Notices</h5>
+
+                {% if latest_notices %}
+                    <div class="list-group">
+                        {% for notice in latest_notices %}
+                            <div class="list-group-item">
+                                <h6 class="mb-1">{{ notice.title }}</h6>
+                                <p class="mb-1">{{ notice.message|truncatechars:150 }}</p>
+                                <small class="text-muted">
+                                    {{ notice.publish_date|date:"d M Y h:i A" }}
+                                </small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">No notices available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<br>
+
+<div class="page-card">
+    <h5>Quick Access</h5>
+
+    <div class="d-grid gap-2">
+        <a href="{% url 'my_student_profile' %}" class="btn btn-outline-primary">
+            My Profile
+        </a>
+
+        <a href="{% url 'my_subjects' %}" class="btn btn-outline-success">
+            My Subjects
+        </a>
+
+        <a href="{% url 'my_attendance' %}" class="btn btn-outline-info">
+            My Attendance
+        </a>
+
+        <a href="/exams/results/list/" class="btn btn-outline-secondary">
+            My Results
+        </a>
+
+        <a href="/finance/list/" class="btn btn-outline-danger">
+            My Fees
+        </a>
+    </div>
+</div>
+{% endblock %}

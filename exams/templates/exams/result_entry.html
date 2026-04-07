@@ -1,0 +1,80 @@
+
+{% extends "base.html" %}
+{% load exam_extras %}
+
+{% block title %}Result Entry{% endblock %}
+{% block page_title %}Result Entry{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h4 class="mb-3">Result Entry</h4>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Exam</label>
+                <select name="exam" class="form-select" required>
+                    <option value="">Select Exam</option>
+                    {% for exam in exams %}
+                        <option value="{{ exam.id }}" {% if selected_exam and selected_exam.id == exam.id %}selected{% endif %}>
+                            {{ exam.title }} - {{ exam.exam_type }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Subject Assignment</label>
+                <select name="subject_assignment" class="form-select" required>
+                    <option value="">Select Subject</option>
+                    {% for item in assignments %}
+                        <option value="{{ item.id }}" {% if selected_assignment and selected_assignment.id == item.id %}selected{% endif %}>
+                            {{ item.subject.name }} | {{ item.course }} | Sem {{ item.semester }}{% if item.section %} | Sec {{ item.section }}{% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Load Students</button>
+
+        {% if students %}
+            <hr>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Enrollment</th>
+                            <th>Marks</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        {% with existing_results.student.id as existing %}
+                        <tr>
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.enrollment_number }}</td>
+                            <td>
+                                <input type="number" step="0.01" name="marks_{{ student.id }}" class="form-control"
+                                       value="{% if existing_results|get_item:student.id %}{{ existing_results|get_item:student.id|attr:'marks_obtained' }}{% endif %}">
+                            </td>
+                            <td>
+                                <input type="text" name="remarks_{{ student.id }}" class="form-control"
+                                       value="{% if existing_results|get_item:student.id %}{{ existing_results|get_item:student.id|attr:'remarks' }}{% endif %}">
+                            </td>
+                        </tr>
+                        {% endwith %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="submit" name="save_results" class="btn btn-success">Save Results</button>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}

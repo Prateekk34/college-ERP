@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}
+Course Profile
+{% endblock %}
+
+{% block page_title %}
+Course Profile
+{% endblock %}
+
+{% block content %}
+
+<div class="page-card">
+
+    <!-- Course Info -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>{{ course.name }}</h4>
+
+        <div>
+            <a href="{% url 'edit_course' course.id %}" class="btn btn-warning btn-sm">
+                Edit
+            </a>
+
+            <a href="{% url 'delete_course' course.id %}" class="btn btn-danger btn-sm">
+                Delete
+            </a>
+        </div>
+    </div>
+
+
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+            <strong>Course Code</strong><br>
+            {{ course.code }}
+        </div>
+
+        <div class="col-md-4">
+            <strong>Department</strong><br>
+            {{ course.department.name }}
+        </div>
+
+        <div class="col-md-4">
+            <strong>Faculty Incharge</strong><br>
+            {% if course.faculty %}
+                {{ course.faculty.name }}
+            {% else %}
+                <span class="text-muted">Not Assigned</span>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+    <!-- Students Section -->
+
+    <hr>
+
+    <h5 class="mb-3">Students Enrolled</h5>
+
+    {% if related_students %}
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Enrollment</th>
+                    <th>Semester</th>
+                    <th>Section</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for student in related_students %}
+
+                <tr>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.enrollment_number }}</td>
+                    <td>{{ student.semester }}</td>
+                    <td>{{ student.section|default:"-" }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+        <p class="text-muted">No students enrolled in this course.</p>
+
+    {% endif %}
+
+
+
+    <!-- Subjects Section -->
+
+    <hr>
+
+    <h5 class="mb-3">Subject Assignments</h5>
+
+    {% if related_assignments %}
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Subject</th>
+                    <th>Department</th>
+                    <th>Semester</th>
+                    <th>Section</th>
+                    <th>Faculty</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for item in related_assignments %}
+
+                <tr>
+
+                    <td>{{ item.subject.name }}</td>
+
+                    <td>
+                        {{ item.department.name }}
+                    </td>
+
+                    <td>
+                        {{ item.semester }}
+                    </td>
+
+                    <td>
+                        {{ item.section|default:"-" }}
+                    </td>
+
+                    <td>
+                        {% if item.faculty %}
+                            {{ item.faculty.name }}
+                        {% else %}
+                            <span class="text-muted">Not Assigned</span>
+                        {% endif %}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+        <p class="text-muted">No subjects assigned to this course.</p>
+
+    {% endif %}
+
+
+
+    <!-- Back Button -->
+
+    <div class="mt-4">
+
+        <a href="{% url 'course_list' %}" class="btn btn-secondary">
+            Back to Course List
+        </a>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

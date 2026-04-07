@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}My Results{% endblock %}
+{% block page_title %}My Results{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">My Results</h4>
+        <a href="{% url 'consolidated_marksheet' %}" class="btn btn-outline-primary">View Marksheet</a>
+    </div>
+
+    {% if results %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Exam</th>
+                        <th>Subject</th>
+                        <th>Marks</th>
+                        <th>Percentage</th>
+                        <th>Grade</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in results %}
+                    <tr>
+                        <td>{{ item.exam.title }}</td>
+                        <td>{{ item.subject_assignment.subject.name }}</td>
+                        <td>{{ item.marks_obtained }} / {{ item.exam.total_marks }}</td>
+                        <td>{{ item.percentage }}%</td>
+                        <td>{{ item.grade }}</td>
+                        <td>{{ item.remarks|default:"-" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted mb-0">No results available.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Timetable{% endblock %}
+{% block page_title %}Timetable{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Timetable</h4>
+        <a href="{% url 'add_timetable' %}" class="btn btn-primary">Add Timetable</a>
+    </div>
+
+    {% if timetables %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Lecture</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Department</th>
+                        <th>Course</th>
+                        <th>Semester</th>
+                        <th>Section</th>
+                        <th>Subject</th>
+                        <th>Faculty</th>
+                        <th>Room</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in timetables %}
+                    <tr>
+                        <td>{{ item.day }}</td>
+                        <td>{{ item.lecture_number }}</td>
+                        <td>{{ item.start_time }}</td>
+                        <td>{{ item.end_time }}</td>
+                        <td>{{ item.subject_assignment.department }}</td>
+                        <td>{{ item.subject_assignment.course }}</td>
+                        <td>{{ item.subject_assignment.semester }}</td>
+                        <td>{{ item.subject_assignment.section|default:"-" }}</td>
+                        <td>{{ item.subject_assignment.subject.name }}</td>
+                        <td>{{ item.subject_assignment.faculty.name|default:"-" }}</td>
+                        <td>{{ item.room|default:"-" }}</td>
+                        <td>
+                            <a href="{% url 'edit_timetable' item.id %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'delete_timetable' item.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted mb-0">No timetable entries found.</p>
+    {% endif %}
+</div>
+{% endblock %}

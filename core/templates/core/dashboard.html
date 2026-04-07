@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ dashboard_title }}{% endblock %}
+{% block page_title %}{{ dashboard_title }}{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Total Students</h6>
+            <h2 class="text-primary">{{ student_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Total Faculty</h6>
+            <h2 class="text-success">{{ faculty_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Total Courses</h6>
+            <h2 class="text-warning">{{ course_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Total Subjects</h6>
+            <h2 class="text-danger">{{ subject_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Attendance Records</h6>
+            <h2 class="text-info">{{ attendance_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Total Exams</h6>
+            <h2 class="text-secondary">{{ exam_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Total Results</h6>
+            <h2 class="text-dark">{{ result_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h6>Fee Records</h6>
+            <h2 class="text-primary">{{ fee_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="page-card">
+            <h5 class="mb-3">Pending Fee Summary</h5>
+            <p class="mb-0 fs-5"><strong>₹{{ pending_fee_total }}</strong></p>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="page-card">
+            <h5 class="mb-3">Quick Access</h5>
+            <div class="d-grid gap-2">
+                {% if request.user.is_superuser or request.user.role == 'faculty' %}
+                    <a href="{% url 'student_list' %}" class="btn btn-outline-primary">Manage Students</a>
+                    <a href="/faculty/" class="btn btn-outline-success">Manage Faculty</a>
+                    <a href="/attendance/" class="btn btn-outline-info">Attendance</a>
+                    <a href="/exams/" class="btn btn-outline-secondary">Manage Exams</a>
+                    <a href="/finance/" class="btn btn-outline-danger">Manage Finance</a>
+                {% elif request.user.role == 'student' %}
+                    <a href="/exams/results/" class="btn btn-outline-secondary">View Results</a>
+                    <a href="/finance/" class="btn btn-outline-danger">View Fees</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="page-card">
+                <h5 class="mb-3">Latest Notices</h5>
+
+                {% if latest_notices %}
+                    <div class="list-group">
+                        {% for notice in latest_notices %}
+                            <div class="list-group-item">
+                                <h6 class="mb-1">{{ notice.title }}</h6>
+                                <p class="mb-1">{{ notice.message|truncatechars:150 }}</p>
+                                <small class="text-muted">
+                                    {{ notice.publish_date|date:"d M Y h:i A" }}
+                                </small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">No notices available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}

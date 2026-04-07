@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Attendance List{% endblock %}
+{% block page_title %}Attendance List{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Attendance Sessions</h3>
+        {% if request.user.is_superuser or request.user.role == 'faculty' or request.user.role == 'admin' %}
+            <a href="{% url 'mark_attendance' %}" class="btn btn-primary">Mark Attendance</a>
+        {% endif %}
+    </div>
+
+    <form method="get" class="row g-2 mb-3">
+        <div class="col-md-4">
+            <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search by subject, course, section">
+        </div>
+        <div class="col-md-2">
+            <input type="text" name="department" value="{{ selected_department }}" class="form-control" placeholder="Department ID">
+        </div>
+        <div class="col-md-2">
+            <input type="text" name="course" value="{{ selected_course }}" class="form-control" placeholder="Course ID">
+        </div>
+        <div class="col-md-2">
+            <input type="date" name="date" value="{{ selected_date }}" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-dark" type="submit">Filter</button>
+            <a href="{% url 'attendance_list' %}" class="btn btn-secondary">Reset</a>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Lecture</th>
+                    <th>Department</th>
+                    <th>Course</th>
+                    <th>Semester</th>
+                    <th>Section</th>
+                    <th>Subject</th>
+                    <th>Faculty</th>
+                    <th>Total Students</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for session in sessions %}
+                <tr>
+                    <td>{{ session.date }}</td>
+                    <td>{{ session.lecture_number }}</td>
+                    <td>{{ session.department }}</td>
+                    <td>{{ session.course }}</td>
+                    <td>{{ session.semester }}</td>
+                    <td>{{ session.section|default:"-" }}</td>
+                    <td>{{ session.subject }}</td>
+                    <td>{{ session.faculty|default:"-" }}</td>
+                    <td>{{ session.total_records }}</td>
+                    <td>
+                        <a href="{% url 'attendance_session_detail' session.id %}" class="btn btn-info btn-sm">
+                            View
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10" class="text-center">No attendance sessions found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

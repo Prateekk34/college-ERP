@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Attendance Profile{% endblock %}
+{% block page_title %}Attendance Profile{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h3 class="mb-4">Attendance Details</h3>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <td>{{ attendance.id }}</td>
+        </tr>
+        <tr>
+            <th>Student</th>
+            <td>{{ attendance.student.name }}</td>
+        </tr>
+        <tr>
+            <th>Subject</th>
+            <td>{{ attendance.subject.name }}</td>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td>{{ attendance.date }}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>{{ attendance.status }}</td>
+        </tr>
+    </table>
+
+    <div class="mt-3">
+        {% if request.user.is_superuser or request.user.role == 'faculty' %}
+            <a href="{% url 'edit_attendance' attendance.id %}" class="btn btn-warning">Edit</a>
+            <a href="{% url 'delete_attendance' attendance.id %}" class="btn btn-danger">Delete</a>
+        {% endif %}
+        <a href="{% url 'attendance_list' %}" class="btn btn-secondary">Back</a>
+    </div>
+</div>
+{% endblock %}

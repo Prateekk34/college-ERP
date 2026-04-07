@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Subjects{% endblock %}
+{% block page_title %}Subjects{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Subjects</h3>
+        {% if request.user.is_superuser or request.user.role == 'admin' or request.user.role == 'faculty' %}
+            <a href="{% url 'subject_add' %}" class="btn btn-primary">Add Subject</a>
+        {% endif %}
+    </div>
+
+    <form method="get" class="mb-3">
+        <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search by subject name or code">
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject in subjects %}
+                <tr>
+                    <td>{{ subject.name }}</td>
+                    <td>{{ subject.code }}</td>
+                    <td>
+                        <a href="{% url 'subject_edit' subject.id %}" class="btn btn-warning btn-sm">Edit</a>
+                        {% if request.user.is_superuser or request.user.role == 'admin' %}
+                            <a href="{% url 'subject_delete' subject.id %}" class="btn btn-danger btn-sm">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center">No subjects found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

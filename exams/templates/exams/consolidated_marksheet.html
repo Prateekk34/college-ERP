@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}My Marksheet{% endblock %}
+{% block page_title %}My Marksheet{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Consolidated Marksheet</h4>
+        <a href="{% url 'marksheet_pdf' %}" class="btn btn-primary">Download PDF</a>
+    </div>
+
+    <p><strong>Name:</strong> {{ student.name }}</p>
+    <p><strong>Enrollment:</strong> {{ student.enrollment_number }}</p>
+    <p><strong>Course:</strong> {{ student.course_fk }}</p>
+    <p><strong>Semester:</strong> {{ student.semester }}</p>
+
+    {% for subject, items in grouped.items %}
+        <div class="mt-4">
+            <h5>{{ subject }}</h5>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Exam</th>
+                        <th>Marks</th>
+                        <th>Percentage</th>
+                        <th>Grade</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.exam.title }}</td>
+                        <td>{{ item.marks_obtained }} / {{ item.exam.total_marks }}</td>
+                        <td>{{ item.percentage }}%</td>
+                        <td>{{ item.grade }}</td>
+                        <td>{{ item.remarks|default:"-" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% empty %}
+        <p class="text-muted">No results available.</p>
+    {% endfor %}
+</div>
+{% endblock %}

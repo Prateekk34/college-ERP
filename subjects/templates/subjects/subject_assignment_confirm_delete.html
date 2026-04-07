@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Subject Assignment{% endblock %}
+{% block page_title %}Delete Subject Assignment{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h3 class="mb-3">Delete Subject Assignment</h3>
+
+    <p>
+        Are you sure you want to delete this assignment?
+    </p>
+
+    <ul>
+        <li><strong>Department:</strong> {{ assignment.department }}</li>
+        <li><strong>Course:</strong> {{ assignment.course }}</li>
+        <li><strong>Semester:</strong> {{ assignment.semester }}</li>
+        <li><strong>Section:</strong> {{ assignment.section|default:"-" }}</li>
+        <li><strong>Subject:</strong> {{ assignment.subject }}</li>
+        <li><strong>Faculty:</strong> {{ assignment.faculty }}</li>
+    </ul>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{% url 'subject_assignment_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

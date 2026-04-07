@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Faculty Exams{% endblock %}
+{% block page_title %}Faculty Exams{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h4 class="mb-3">My Subject Exams</h4>
+
+    {% if schedules %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Exam</th>
+                        <th>Subject</th>
+                        <th>Course</th>
+                        <th>Semester</th>
+                        <th>Section</th>
+                        <th>Date</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Room</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in schedules %}
+                    <tr>
+                        <td>{{ item.exam.title }}</td>
+                        <td>{{ item.subject_assignment.subject.name }}</td>
+                        <td>{{ item.subject_assignment.course }}</td>
+                        <td>{{ item.subject_assignment.semester }}</td>
+                        <td>{{ item.subject_assignment.section|default:"-" }}</td>
+                        <td>{{ item.paper_date }}</td>
+                        <td>{{ item.start_time }}</td>
+                        <td>{{ item.end_time }}</td>
+                        <td>{{ item.room|default:"-" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted mb-0">No exam schedule assigned.</p>
+    {% endif %}
+</div>
+{% endblock %}

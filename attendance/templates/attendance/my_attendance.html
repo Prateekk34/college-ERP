@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}My Attendance{% endblock %}
+{% block page_title %}My Attendance{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h3 class="mb-3">My Attendance</h3>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Lecture</th>
+                    <th>Department</th>
+                    <th>Course</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.session.date }}</td>
+                    <td>{{ record.session.lecture_number }}</td>
+                    <td>{{ record.session.department }}</td>
+                    <td>{{ record.session.course }}</td>
+                    <td>{{ record.session.subject }}</td>
+                    <td>
+                        {% if record.status == 'Present' %}
+                            <span class="badge bg-success">Present</span>
+                        {% elif record.status == 'Absent' %}
+                            <span class="badge bg-danger">Absent</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Leave</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No attendance found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

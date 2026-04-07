@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Student Attendance Report{% endblock %}
+{% block page_title %}Student Attendance Report{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h3 class="mb-4">{{ student.name }} - Attendance Report</h3>
+
+    <div class="mb-4">
+        <h5>Overall Summary</h5>
+        <table class="table table-bordered">
+            <tr>
+                <th>Total Classes</th>
+                <td>{{ overall_total }}</td>
+            </tr>
+            <tr>
+                <th>Present Classes</th>
+                <td>{{ overall_present }}</td>
+            </tr>
+            <tr>
+                <th>Overall Percentage</th>
+                <td>{{ overall_percentage|floatformat:2 }}%</td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <h5>Subject-wise Report</h5>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Subject</th>
+                    <th>Total Classes</th>
+                    <th>Present</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in subject_reports %}
+                <tr>
+                    <td>{{ item.subject.name }}</td>
+                    <td>{{ item.total }}</td>
+                    <td>{{ item.present }}</td>
+                    <td>{{ item.percentage|floatformat:2 }}%</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No attendance report available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="/dashboard/" class="btn btn-secondary">Back</a>
+</div>
+{% endblock %}

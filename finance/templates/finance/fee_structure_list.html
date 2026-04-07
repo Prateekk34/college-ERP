@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Fee Structures{% endblock %}
+{% block page_title %}Fee Structures{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Fee Structures</h4>
+        <a href="{% url 'fee_structure_add' %}" class="btn btn-primary">Add Structure</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Academic Year</th>
+                    <th>Year</th>
+                    <th>Semester</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.course }}</td>
+                    <td>{{ item.academic_year }}</td>
+                    <td>{{ item.year }}</td>
+                    <td>{{ item.semester|default:"-" }}</td>
+                    <td>{{ item.total_amount }}</td>
+                    <td>{% if item.is_active %}Active{% else %}Inactive{% endif %}</td>
+                    <td><a href="{% url 'fee_structure_edit' item.id %}" class="btn btn-sm btn-warning">Edit</a></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="7" class="text-center text-muted">No fee structure found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

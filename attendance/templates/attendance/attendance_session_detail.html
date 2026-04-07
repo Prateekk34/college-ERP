@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Attendance Detail{% endblock %}
+{% block page_title %}Attendance Detail{% endblock %}
+
+{% block content %}
+<div class="page-card mb-4">
+    <h3 class="mb-3">Attendance Session Detail</h3>
+
+    <div class="row">
+        <div class="col-md-4 mb-2"><strong>Date:</strong> {{ session.date }}</div>
+        <div class="col-md-4 mb-2"><strong>Lecture:</strong> {{ session.lecture_number }}</div>
+        <div class="col-md-4 mb-2"><strong>Department:</strong> {{ session.department }}</div>
+        <div class="col-md-4 mb-2"><strong>Course:</strong> {{ session.course }}</div>
+        <div class="col-md-4 mb-2"><strong>Semester:</strong> {{ session.semester }}</div>
+        <div class="col-md-4 mb-2"><strong>Section:</strong> {{ session.section|default:"-" }}</div>
+        <div class="col-md-4 mb-2"><strong>Subject:</strong> {{ session.subject }}</div>
+        <div class="col-md-4 mb-2"><strong>Faculty:</strong> {{ session.faculty|default:"-" }}</div>
+    </div>
+</div>
+
+<div class="page-card">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Photo</th>
+                    <th>Name</th>
+                    <th>Enrollment</th>
+                    <th>Roll No</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>
+                        {% if record.student.photo %}
+                            <img src="{{ record.student.photo.url }}" alt="Photo" width="45" height="45" style="border-radius:50%; object-fit:cover;">
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ record.student.name }}</td>
+                    <td>{{ record.student.enrollment_number }}</td>
+                    <td>{{ record.student.roll_number|default:"-" }}</td>
+                    <td>
+                        {% if record.status == 'Present' %}
+                            <span class="badge bg-success">Present</span>
+                        {% elif record.status == 'Absent' %}
+                            <span class="badge bg-danger">Absent</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Leave</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}Faculty Dashboard{% endblock %}
+{% block page_title %}Faculty Dashboard{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+
+    <div class="col-md-4">
+        <div class="stat-card">
+            <h6>Assigned Subjects</h6>
+            <h2 class="text-primary">{{ subject_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="stat-card">
+            <h6>Recent Attendance Sessions</h6>
+            <h2 class="text-success">{{ recent_attendance|length }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="stat-card">
+            <h6>Profile Status</h6>
+            <h2 class="text-warning">
+                {% if faculty %}Linked{% else %}Not Linked{% endif %}
+            </h2>
+        </div>
+    </div>
+
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="page-card">
+            <h5 class="mb-3">Quick Access</h5>
+
+            <div class="d-grid gap-2">
+                {% if faculty %}
+                    <a href="{% url 'my_faculty_profile' %}" class="btn btn-outline-primary">My Profile</a>
+                    <a href="{% url 'my_assigned_subjects' %}" class="btn btn-outline-success">My Assigned Subjects</a>
+                {% endif %}
+                <a href="/attendance/mark/" class="btn btn-outline-info">Take Attendance</a>
+                <a href="/attendance/" class="btn btn-outline-dark">View Attendance</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="page-card">
+            <h5 class="mb-3">My Assigned Subjects</h5>
+
+            {% if assigned_subjects %}
+                <ul class="list-group">
+                    {% for item in assigned_subjects %}
+                        <li class="list-group-item">
+                            {{ item.subject.name }} - {{ item.course.name }} - Semester {{ item.semester }}{% if item.section %} - Section {{ item.section }}{% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted mb-0">No assigned subjects found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="page-card">
+                <h5 class="mb-3">Latest Notices</h5>
+
+                {% if latest_notices %}
+                    <div class="list-group">
+                        {% for notice in latest_notices %}
+                            <div class="list-group-item">
+                                <h6 class="mb-1">{{ notice.title }}</h6>
+                                <p class="mb-1">{{ notice.message|truncatechars:150 }}</p>
+                                <small class="text-muted">
+                                    {{ notice.publish_date|date:"d M Y h:i A" }}
+                                </small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">No notices available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<div class="page-card mt-4">
+    <h5 class="mb-3">Recent Attendance</h5>
+
+    {% if recent_attendance %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Lecture</th>
+                        <th>Department</th>
+                        <th>Course</th>
+                        <th>Subject</th>
+                        <th>Section</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for session in recent_attendance %}
+                    <tr>
+                        <td>{{ session.date }}</td>
+                        <td>{{ session.lecture_number }}</td>
+                        <td>{{ session.department }}</td>
+                        <td>{{ session.course }}</td>
+                        <td>{{ session.subject }}</td>
+                        <td>{{ session.section|default:"-" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted mb-0">No recent attendance sessions found.</p>
+    {% endif %}
+</div>
+{% endblock %}

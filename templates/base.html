@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}College ERP{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6fb;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+            background: #172844;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+        }
+
+        .sidebar h3 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .sidebar a {
+            color: #dbe4f0;
+            text-decoration: none;
+            display: block;
+            padding: 12px 20px;
+            font-size: 15px;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active-link {
+            background: #22385d;
+            color: white;
+            border-left: 3px solid #4da3ff;
+        }
+
+        .sidebar-section-title {
+            font-size: 12px;
+            color: #8fa4c3;
+            padding: 12px 20px 6px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .sidebar-logout-btn {
+            color: #dbe4f0;
+            text-decoration: none;
+            display: block;
+            padding: 12px 20px;
+            font-size: 15px;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-logout-btn:hover {
+            background: #22385d;
+            color: white;
+            border-left: 3px solid #4da3ff;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: white;
+            padding: 16px 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .content-area {
+            padding: 24px;
+        }
+
+        .page-card {
+            background: white;
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            height: 100%;
+        }
+
+        .stat-card h6 {
+            color: #6c757d;
+            margin-bottom: 8px;
+        }
+
+        .stat-card h2 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #e9ecef;
+        }
+
+        @media (max-width: 991px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h3>College ERP</h3>
+
+    {% if request.user.is_authenticated %}
+
+        {% if request.user.is_superuser or request.user.role == 'admin' %}
+            <a href="/dashboard/" class="{% if '/dashboard' in request.path or request.path == '/' %}active-link{% endif %}">
+                Dashboard
+            </a>
+
+            <div class="sidebar-section-title">Management</div>
+
+            <a href="{% url 'student_list' %}" class="{% if '/students/' in request.path %}active-link{% endif %}">
+                Students
+            </a>
+
+            <a href="{% url 'faculty_list' %}" class="{% if '/faculty/' in request.path %}active-link{% endif %}">
+                Faculty
+            </a>
+
+            <a href="/courses/" class="{% if '/courses/' in request.path %}active-link{% endif %}">
+                Courses
+            </a>
+
+            <a href="/departments/" class="{% if '/departments/' in request.path %}active-link{% endif %}">
+                Departments
+            </a>
+
+            <div class="sidebar-section-title">Academics</div>
+
+            <a href="/subjects/" class="{% if '/subjects/' in request.path and '/subjects/assignments/' not in request.path and '/subjects/my/' not in request.path %}active-link{% endif %}">
+                Subjects
+            </a>
+
+            <a href="{% url 'subject_assignment_list' %}" class="{% if '/subjects/assignments/' in request.path %}active-link{% endif %}">
+                Subject Assignments
+            </a>
+
+            <a href="{% url 'notice_list' %}" class="{% if '/notices/' in request.path %}active-link{% endif %}">
+                Notices
+            </a>
+
+            <a href="{% url 'attendance_list' %}" class="{% if '/attendance/' in request.path %}active-link{% endif %}">
+                Attendance
+            </a>
+
+            <a href="{% url 'timetable_list' %}" class="{% if '/timetable/' in request.path and '/timetable/faculty/' not in request.path and '/timetable/student/' not in request.path %}active-link{% endif %}">
+                Timetable
+            </a>
+
+            <a href="/exams/" class="{% if '/exams/' in request.path and '/exams/results/' not in request.path %}active-link{% endif %}">
+                Exams
+            </a>
+
+            <a href="{% url 'exam_schedule_list' %}" class="{% if '/exams/schedule/' in request.path %}active-link{% endif %}">
+                Exam Schedule
+            </a>
+
+            <a href="{% url 'result_list' %}" class="{% if '/exams/results/list/' in request.path %}active-link{% endif %}">
+                Results
+            </a>
+
+            <a href="{% url 'fee_structure_list' %}" class="{% if '/finance/structures/' in request.path %}active-link{% endif %}">
+                Fee Structures
+            </a>
+
+            <a href="{% url 'promote_student_fee' %}" class="{% if '/finance/promote/' in request.path %}active-link{% endif %}">
+                Promote Fees
+            </a>
+
+            <a href="{% url 'student_fee_list' %}" class="{% if '/finance/students/' in request.path %}active-link{% endif %}">
+                Student Fees
+            </a>
+
+        {% elif request.user.role == 'faculty' %}
+            <a href="/dashboard/" class="{% if '/dashboard' in request.path or request.path == '/' %}active-link{% endif %}">
+                Dashboard
+            </a>
+
+            <div class="sidebar-section-title">Faculty Panel</div>
+
+            <a href="{% url 'my_faculty_profile' %}" class="{% if '/faculty/my-profile/' in request.path %}active-link{% endif %}">
+                My Profile
+            </a>
+
+            <a href="{% url 'my_assigned_subjects' %}" class="{% if '/faculty/my-subjects/' in request.path %}active-link{% endif %}">
+                My Subjects
+            </a>
+
+            <a href="{% url 'notice_list' %}" class="{% if '/notices/' in request.path %}active-link{% endif %}">
+                Notices
+            </a>
+
+            <a href="{% url 'mark_attendance' %}" class="{% if '/attendance/mark/' in request.path %}active-link{% endif %}">
+                Take Attendance
+            </a>
+
+            <a href="{% url 'attendance_list' %}" class="{% if '/attendance/' in request.path and '/attendance/mark/' not in request.path %}active-link{% endif %}">
+                Attendance Records
+            </a>
+
+            <a href="{% url 'faculty_timetable' %}" class="{% if '/timetable/faculty/' in request.path %}active-link{% endif %}">
+                My Timetable
+            </a>
+
+            <a href="{% url 'faculty_list' %}" class="{% if '/faculty/' in request.path and '/faculty/my-profile/' not in request.path and '/faculty/my-subjects/' not in request.path %}active-link{% endif %}">
+                Faculty Directory
+            </a>
+
+            <a href="{% url 'subject_assignment_list' %}" class="{% if '/subjects/assignments/' in request.path %}active-link{% endif %}">
+                Subject Assignments
+            </a>
+
+            <a href="{% url 'faculty_exam_schedule' %}" class="{% if '/exams/faculty-exams/' in request.path %}active-link{% endif %}">
+                My Exams
+            </a>
+
+            <a href="{% url 'result_entry' %}" class="{% if '/exams/results/entry/' in request.path %}active-link{% endif %}">
+                Upload Results
+            </a>
+
+            <a href="{% url 'faculty_note_list' %}" class="{% if '/notes/faculty/' in request.path %}active-link{% endif %}">
+                My Notes
+            </a>
+
+            <a href="{% url 'upload_note' %}" class="{% if '/notes/upload/' in request.path %}active-link{% endif %}">
+                Upload Notes
+            </a>
+
+
+
+        {% elif request.user.role == 'student' %}
+            <a href="/dashboard/" class="{% if '/dashboard' in request.path or request.path == '/' %}active-link{% endif %}">
+                Dashboard
+            </a>
+
+            <div class="sidebar-section-title">My Panel</div>
+
+            <a href="{% url 'my_student_profile' %}" class="{% if '/students/profile/' in request.path %}active-link{% endif %}">
+                My Profile
+            </a>
+
+            <a href="{% url 'my_subjects' %}" class="{% if '/subjects/my/' in request.path %}active-link{% endif %}">
+                My Subjects
+            </a>
+
+            <a href="{% url 'notice_list' %}" class="{% if '/notices/' in request.path %}active-link{% endif %}">
+                Notices
+            </a>
+
+            <a href="{% url 'my_attendance' %}" class="{% if '/attendance/my/' in request.path %}active-link{% endif %}">
+                My Attendance
+            </a>
+
+            <a href="{% url 'student_timetable' %}" class="{% if '/timetable/student/' in request.path %}active-link{% endif %}">
+                My Timetable
+            </a>
+
+            <a href="{% url 'student_note_list' %}" class="{% if '/notes/student/' in request.path %}active-link{% endif %}">
+                My Notes
+            </a>
+
+            <a href="{% url 'student_exam_schedule' %}" class="{% if '/exams/my-exams/' in request.path %}active-link{% endif %}">
+                My Exams
+            </a>
+
+            <a href="{% url 'student_result_list' %}" class="{% if '/exams/results/student/' in request.path %}active-link{% endif %}">
+                My Results
+            </a>
+
+            <a href="{% url 'consolidated_marksheet' %}" class="{% if '/exams/marksheet/' in request.path %}active-link{% endif %}">
+                My Marksheet
+            </a>
+
+            <a href="{% url 'my_fees' %}" class="{% if '/finance/my-fees/' in request.path %}active-link{% endif %}">
+                My Fees
+            </a>
+
+        {% endif %}
+
+        <div class="sidebar-section-title">System</div>
+
+        {% if request.user.is_superuser %}
+            <a href="/admin/">Admin Panel</a>
+        {% endif %}
+
+        <form method="post" action="/accounts/logout/" style="margin:0;">
+            {% csrf_token %}
+            <button type="submit" class="sidebar-logout-btn">Logout</button>
+        </form>
+
+    {% else %}
+        <a href="/dashboard/" class="{% if '/dashboard' in request.path or request.path == '/' %}active-link{% endif %}">
+            Dashboard
+        </a>
+
+        <div class="sidebar-section-title">System</div>
+        <a href="/accounts/login/" class="{% if '/accounts/login/' in request.path %}active-link{% endif %}">
+            Login
+        </a>
+    {% endif %}
+</div>
+
+<div class="main-content">
+    <div class="topbar d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">{% block page_title %}College ERP{% endblock %}</h4>
+
+        <div>
+            {% if request.user.is_authenticated %}
+                <span class="me-2 text-muted">Welcome,</span>
+                <strong>{{ request.user.username }}</strong>
+
+                {% if request.user.is_superuser %}
+                    <span class="badge bg-danger ms-2">Admin</span>
+                {% elif request.user.role %}
+                    <span class="badge bg-primary ms-2">{{ request.user.role|title }}</span>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="content-area">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+</body>
+</html>

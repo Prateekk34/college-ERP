@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Exam Schedule{% endblock %}
+{% block page_title %}Exam Schedule{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Exam Schedule</h4>
+        <a href="{% url 'exam_schedule_add' %}" class="btn btn-primary">Add Schedule</a>
+    </div>
+
+    {% if schedules %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Exam</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Room</th>
+                        <th>Max Marks</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in schedules %}
+                    <tr>
+                        <td>{{ item.exam.title }}</td>
+                        <td>{{ item.subject_assignment.subject.name }}</td>
+                        <td>{{ item.paper_date }}</td>
+                        <td>{{ item.start_time }}</td>
+                        <td>{{ item.end_time }}</td>
+                        <td>{{ item.room|default:"-" }}</td>
+                        <td>{{ item.max_marks }}</td>
+                        <td>
+                            <a href="{% url 'exam_schedule_edit' item.id %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'exam_schedule_delete' item.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted mb-0">No exam schedules found.</p>
+    {% endif %}
+</div>
+{% endblock %}

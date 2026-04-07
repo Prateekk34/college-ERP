@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block page_title %}Edit Attendance{% endblock %}
+
+{% block content %}
+
+<div class="page-card">
+
+<h4>Edit Attendance</h4>
+
+<form method="post">
+
+{% csrf_token %}
+
+<table class="table table-bordered">
+
+<tr>
+<th>Student</th>
+<th>Status</th>
+</tr>
+
+{% for r in records %}
+
+<tr>
+
+<td>{{ r.student.name }}</td>
+
+<td>
+
+<label>
+<input type="radio" name="status_{{ r.student.id }}" value="Present"
+{% if r.status == "Present" %}checked{% endif %}>
+Present
+</label>
+
+<label>
+<input type="radio" name="status_{{ r.student.id }}" value="Absent"
+{% if r.status == "Absent" %}checked{% endif %}>
+Absent
+</label>
+
+<label>
+<input type="radio" name="status_{{ r.student.id }}" value="Leave"
+{% if r.status == "Leave" %}checked{% endif %}>
+Leave
+</label>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<button type="submit" class="btn btn-success">
+Update Attendance
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

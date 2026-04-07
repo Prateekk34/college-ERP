@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Mark Attendance{% endblock %}
+{% block page_title %}Mark Attendance{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h3 class="mb-3">Mark Attendance</h3>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="row">
+            {% for field in form %}
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="text-danger small mt-1">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" name="load_students" class="btn btn-primary">Load Students</button>
+        </div>
+
+        {% if students %}
+        <div class="table-responsive mt-4">
+            <table class="table table-bordered align-middle">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Enrollment</th>
+                        <th>Roll No</th>
+                        <th>Department</th>
+                        <th>Course</th>
+                        <th>Semester</th>
+                        <th>Section</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>
+                            {% if student.photo %}
+                                <img src="{{ student.photo.url }}" alt="Photo" width="45" height="45" style="border-radius:50%; object-fit:cover;">
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.enrollment_number }}</td>
+                        <td>{{ student.roll_number|default:"-" }}</td>
+                        <td>{{ student.department }}</td>
+                        <td>{{ student.course_fk }}</td>
+                        <td>{{ student.semester }}</td>
+                        <td>{{ student.section|default:"-" }}</td>
+                        <td>
+                            <div class="d-flex gap-3">
+                                <label><input type="radio" name="status_{{ student.id }}" value="Present" checked> Present</label>
+                                <label><input type="radio" name="status_{{ student.id }}" value="Absent"> Absent</label>
+                                <label><input type="radio" name="status_{{ student.id }}" value="Leave"> Leave</label>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <button type="submit" name="save_attendance" class="btn btn-success">Save Attendance</button>
+        {% endif %}
+    </form>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const autoSubmitFields = [
+        "id_department",
+        "id_course",
+        "id_semester",
+        "id_section"
+    ];
+
+    autoSubmitFields.forEach(function(fieldId) {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener("change", function () {
+                this.form.submit();
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

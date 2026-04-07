@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}My Assigned Subjects{% endblock %}
+{% block page_title %}My Assigned Subjects{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h4 class="mb-3">My Assigned Subjects</h4>
+
+    {% if assigned_subjects %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Course</th>
+                        <th>Semester</th>
+                        <th>Section</th>
+                        <th>Subject</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in assigned_subjects %}
+                    <tr>
+                        <td>{{ item.department }}</td>
+                        <td>{{ item.course }}</td>
+                        <td>{{ item.semester }}</td>
+                        <td>{{ item.section|default:"-" }}</td>
+                        <td>{{ item.subject.name }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted mb-0">No assigned subjects found.</p>
+    {% endif %}
+</div>
+{% endblock %}

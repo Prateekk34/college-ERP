@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Department Profile{% endblock %}
+{% block page_title %}Department Profile{% endblock %}
+
+{% block content %}
+
+<div class="page-card mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">{{ department.name }}</h4>
+        <div>
+            <a href="{% url 'edit_department' department.id %}" class="btn btn-warning">Edit</a>
+            <a href="{% url 'delete_department' department.id %}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'department_list' %}" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <tr><th>Name</th><td>{{ department.name }}</td></tr>
+        <tr><th>Code</th><td>{{ department.code }}</td></tr>
+        <tr><th>Total Courses</th><td>{{ course_count }}</td></tr>
+        <tr><th>Total Faculty</th><td>{{ faculty_count }}</td></tr>
+        <tr><th>Total Students</th><td>{{ student_count }}</td></tr>
+        <tr><th>Total Subject Assignments</th><td>{{ assignment_count }}</td></tr>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="page-card h-100">
+            <h5 class="mb-3">Related Courses</h5>
+            {% if related_courses %}
+                <ul class="list-group">
+                    {% for course in related_courses %}
+                        <li class="list-group-item">{{ course.name }} ({{ course.code }})</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted mb-0">No courses found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="page-card h-100">
+            <h5 class="mb-3">Related Faculty</h5>
+            {% if related_faculty %}
+                <ul class="list-group">
+                    {% for faculty in related_faculty %}
+                        <li class="list-group-item">{{ faculty.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted mb-0">No faculty found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="page-card h-100">
+            <h5 class="mb-3">Related Students</h5>
+            {% if related_students %}
+                <ul class="list-group">
+                    {% for student in related_students|slice:":10" %}
+                        <li class="list-group-item">
+                            {{ student.name }}{% if student.enrollment_number %} ({{ student.enrollment_number }}){% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted mb-0">No students found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="page-card h-100">
+            <h5 class="mb-3">Subject Assignments</h5>
+            {% if related_assignments %}
+                <ul class="list-group">
+                    {% for item in related_assignments|slice:":10" %}
+                        <li class="list-group-item">
+                            {{ item.subject.name }} | {{ item.course.name }} | Sem {{ item.semester }}
+                            {% if item.section %}| Sec {{ item.section }}{% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted mb-0">No subject assignments found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Student List</h3>
+        {% if request.user.is_superuser or request.user.role == "admin" or request.user.role == "faculty" %}
+            <a href="{% url 'student_add' %}" class="btn btn-primary">Add Student</a>
+        {% endif %}
+    </div>
+
+    <form method="get" class="row g-2 mb-3">
+        <div class="col-md-3">
+            <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search by name, enrollment">
+        </div>
+
+        <div class="col-md-3">
+            <select name="department" class="form-select">
+                <option value="">All Departments</option>
+                {% for dept in departments %}
+                    <option value="{{ dept.id }}" {% if selected_department == dept.id|stringformat:"s" %}selected{% endif %}>
+                        {{ dept.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <select name="course" class="form-select">
+                <option value="">All Courses</option>
+                {% for course in courses %}
+                    <option value="{{ course.id }}" {% if selected_course == course.id|stringformat:"s" %}selected{% endif %}>
+                        {{ course.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <select name="semester" class="form-select">
+                <option value="">All Semesters</option>
+                <option value="1" {% if selected_semester == "1" %}selected{% endif %}>Semester 1</option>
+                <option value="2" {% if selected_semester == "2" %}selected{% endif %}>Semester 2</option>
+                <option value="3" {% if selected_semester == "3" %}selected{% endif %}>Semester 3</option>
+                <option value="4" {% if selected_semester == "4" %}selected{% endif %}>Semester 4</option>
+                <option value="5" {% if selected_semester == "5" %}selected{% endif %}>Semester 5</option>
+                <option value="6" {% if selected_semester == "6" %}selected{% endif %}>Semester 6</option>
+                <option value="7" {% if selected_semester == "7" %}selected{% endif %}>Semester 7</option>
+                <option value="8" {% if selected_semester == "8" %}selected{% endif %}>Semester 8</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-dark">Filter</button>
+            <a href="{% url 'student_list' %}" class="btn btn-secondary">Reset</a>
+        </div>
+    </form>
+
+    <div class="card shadow">
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Enrollment</th>
+                        <th>Roll No</th>
+                        <th>Department</th>
+                        <th>Course</th>
+                        <th>Semester</th>
+                        <th>Year</th>
+                        <th>Section</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>
+                            {% if student.photo %}
+                                <img src="{{ student.photo.url }}" alt="Photo" width="45" height="45" style="border-radius:50%; object-fit:cover;">
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.enrollment_number }}</td>
+                        <td>{{ student.roll_number }}</td>
+                        <td>{{ student.department }}</td>
+                        <td>{{ student.course_fk }}</td>
+                        <td>{{ student.semester }}</td>
+                        <td>{{ student.year }}</td>
+                        <td>{{ student.section }}</td>
+                        <td>
+                            <a href="{% url 'student_profile' student.id %}" class="btn btn-info btn-sm">View</a>
+
+                            {% if request.user.is_superuser or request.user.role == "admin" or request.user.role == "faculty" %}
+                                <a href="{% url 'student_edit' student.id %}" class="btn btn-warning btn-sm">Edit</a>
+                            {% endif %}
+
+                            {% if request.user.is_superuser or request.user.role == "admin" %}
+                                <a href="{% url 'student_delete' student.id %}" class="btn btn-danger btn-sm">Delete</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center">No students found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

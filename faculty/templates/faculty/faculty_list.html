@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Faculty List{% endblock %}
+{% block page_title %}Faculty List{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="page-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Faculty List</h2>
+
+        {% if request.user.is_superuser or request.user.role == 'faculty' %}
+            <a href="/faculty/add/" class="btn btn-primary">Add Faculty</a>
+        {% endif %}
+    </div>
+
+    <form method="GET" class="row g-2 mb-3">
+        <div class="col-md-4">
+            <input type="text" name="q" class="form-control" placeholder="Search Faculty" value="{{ request.GET.q }}">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-dark">Search</button>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Photo</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Profile</th>
+                    {% if request.user.is_superuser or request.user.role == 'faculty' %}
+                        <th>Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for faculty in faculties %}
+                <tr>
+                    <td>{{ faculty.id }}</td>
+
+                    <td>
+                        {% if faculty.photo %}
+                            <img src="{{ faculty.photo.url }}" width="60" height="60" alt="Faculty Photo" class="rounded">
+                        {% else %}
+                            <span class="text-muted">No Photo</span>
+                        {% endif %}
+                    </td>
+
+                    <td>{{ faculty.name }}</td>
+                    <td>{{ faculty.email }}</td>
+                    <td>{{ faculty.department }}</td>
+
+                    <td>
+                        <a href="/faculty/profile/{{ faculty.id }}/" class="btn btn-info btn-sm">View</a>
+                    </td>
+
+                    {% if request.user.is_superuser or request.user.role == 'faculty' %}
+                    <td>
+                        <a href="/faculty/edit/{{ faculty.id }}/" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="/faculty/delete/{{ faculty.id }}/" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">No faculty found.</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    <nav>
+        <ul class="pagination">
+            {% if faculties.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ faculties.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Previous</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item disabled">
+                <span class="page-link">Page {{ faculties.number }} of {{ faculties.paginator.num_pages }}</span>
+            </li>
+
+            {% if faculties.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ faculties.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ faculties.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Last</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+{% endblock %}

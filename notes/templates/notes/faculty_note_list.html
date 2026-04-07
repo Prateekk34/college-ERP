@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}My Notes{% endblock %}
+{% block page_title %}My Notes{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">My Uploaded Notes</h4>
+        <a href="{% url 'upload_note' %}" class="btn btn-primary">Upload Note</a>
+    </div>
+
+    {% if notes %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Subject</th>
+                        <th>Course</th>
+                        <th>Semester</th>
+                        <th>Section</th>
+                        <th>Uploaded</th>
+                        <th>File</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for note in notes %}
+                    <tr>
+                        <td>{{ note.title }}</td>
+                        <td>{{ note.subject_assignment.subject.name }}</td>
+                        <td>{{ note.subject_assignment.course }}</td>
+                        <td>{{ note.subject_assignment.semester }}</td>
+                        <td>{{ note.subject_assignment.section|default:"-" }}</td>
+                        <td>{{ note.uploaded_at }}</td>
+                        <td>
+                            <a href="{{ note.file.url }}" target="_blank" class="btn btn-sm btn-outline-success">Open</a>
+                        </td>
+                        <td>
+                            <a href="{% url 'edit_note' note.id %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'delete_note' note.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted mb-0">No notes uploaded yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

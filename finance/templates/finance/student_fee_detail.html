@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Fee Detail{% endblock %}
+{% block page_title %}Fee Detail{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h4 class="mb-3">{{ item.student.name }} - Fee Detail</h4>
+
+    <div class="row mb-3">
+        <div class="col-md-4"><strong>Academic Year:</strong> {{ item.academic_year }}</div>
+        <div class="col-md-4"><strong>Year:</strong> {{ item.year }}</div>
+        <div class="col-md-4"><strong>Semester:</strong> {{ item.semester|default:"-" }}</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3"><strong>Base Fee:</strong> {{ item.base_amount }}</div>
+        <div class="col-md-3"><strong>Extra Fee:</strong> {{ item.extra_total }}</div>
+        <div class="col-md-3"><strong>Total Paid:</strong> {{ item.total_paid }}</div>
+        <div class="col-md-3"><strong>Pending:</strong> {{ item.pending_amount }}</div>
+    </div>
+
+    <div class="mb-3">
+        <a href="{% url 'extra_fee_add' item.id %}" class="btn btn-warning">Add Extra Fee</a>
+        <a href="{% url 'installment_add' item.id %}" class="btn btn-success">Add Installment</a>
+    </div>
+
+    <h5>Extra Fees</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>Reason</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for x in extras %}
+            <tr>
+                <td>{{ x.title }}</td>
+                <td>{{ x.amount }}</td>
+                <td>{{ x.reason|default:"-" }}</td>
+                <td>{{ x.added_on }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="text-center text-muted">No extra fees.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h5 class="mt-4">Installments</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Receipt No</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Mode</th>
+                <th>Reference</th>
+                <th>Remarks</th>
+                <th>Receipt</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in installments %}
+            <tr>
+                <td>{{ i.receipt_no }}</td>
+                <td>{{ i.amount_paid }}</td>
+                <td>{{ i.payment_date }}</td>
+                <td>{{ i.payment_mode }}</td>
+                <td>{{ i.reference_no|default:"-" }}</td>
+                <td>{{ i.remarks|default:"-" }}</td>
+                <td><a href="{% url 'installment_receipt_pdf' i.id %}" class="btn btn-sm btn-info">PDF</a></td>
+                <td><a href="{% url 'installment_edit' i.id %}" class="btn btn-sm btn-warning">Edit</a></td>
+                <td><a href="{% url 'installment_delete' i.id %}" class="btn btn-sm btn-danger">Delete</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="9" class="text-center text-muted">No installments yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

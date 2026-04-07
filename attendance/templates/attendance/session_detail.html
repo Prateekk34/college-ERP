@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block page_title %}Attendance Session{% endblock %}
+
+{% block content %}
+
+<div class="page-card">
+
+<h4>Attendance Session</h4>
+
+<p><b>Department:</b> {{ session.department }}</p>
+<p><b>Course:</b> {{ session.course }}</p>
+<p><b>Semester:</b> {{ session.semester }}</p>
+<p><b>Section:</b> {{ session.section }}</p>
+<p><b>Subject:</b> {{ session.subject }}</p>
+<p><b>Date:</b> {{ session.date }}</p>
+<p><b>Lecture:</b> {{ session.lecture_number }}</p>
+
+<a href="{% url 'edit_attendance' session.id %}" class="btn btn-warning mb-3">
+Edit Attendance
+</a>
+
+<table class="table table-bordered">
+
+<tr>
+<th>Student</th>
+<th>Status</th>
+</tr>
+
+{% for r in records %}
+
+<tr>
+<td>{{ r.student.name }}</td>
+<td>{{ r.status }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

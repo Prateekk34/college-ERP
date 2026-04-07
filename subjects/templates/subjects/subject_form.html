@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Subject Form{% endblock %}
+{% block page_title %}Subject Form{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h3 class="mb-3">Add / Edit Subject</h3>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="text-danger small mt-1">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="{% url 'subject_list' %}" class="btn btn-secondary">Back</a>
+    </form>
+</div>
+{% endblock %}

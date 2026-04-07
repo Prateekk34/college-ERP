@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Student Profile</h4>
+        </div>
+        <div class="card-body">
+            {% if student.photo %}
+            <img src="{{ student.photo.url }}" class="profile-img mb-3">
+            {% else %}
+            <p>No Photo</p>
+            {% endif %}
+
+            <p><strong>Name:</strong> {{ student.name }}</p>
+            <p><strong>Username:</strong> {{ student.user.username }}</p>
+            <p><strong>Enrollment Number:</strong> {{ student.enrollment_number }}</p>
+            <p><strong>Roll Number:</strong> {{ student.roll_number }}</p>
+            <p><strong>Department:</strong> {{ student.department }}</p>
+            <p><strong>Course:</strong> {{ student.course_fk }}</p>
+            <p><strong>Semester:</strong> {{ student.semester }}</p>
+            <p><strong>Year:</strong> {{ student.year }}</p>
+            <p><strong>Section:</strong> {{ student.section }}</p>
+            <p><strong>Phone:</strong> {{ student.phone }}</p>
+            <p><strong>Address:</strong> {{ student.address }}</p>
+            <p><strong>Date of Birth:</strong> {{ student.date_of_birth }}</p>
+            <p><strong>Gender:</strong> {{ student.gender }}</p>
+            <p><strong>Admission Date:</strong> {{ student.admission_date }}</p>
+
+            <a href="{% url 'student_list' %}" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

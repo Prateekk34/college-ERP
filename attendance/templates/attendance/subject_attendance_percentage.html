@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Subject Attendance Percentage{% endblock %}
+{% block page_title %}Subject Attendance Percentage{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h3 class="mb-4">{{ student.name }} - {{ subject.name }}</h3>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>Total Classes</th>
+            <td>{{ total_classes }}</td>
+        </tr>
+        <tr>
+            <th>Present Classes</th>
+            <td>{{ present_classes }}</td>
+        </tr>
+        <tr>
+            <th>Attendance Percentage</th>
+            <td>{{ percentage|floatformat:2 }}%</td>
+        </tr>
+    </table>
+
+    <a href="/dashboard/" class="btn btn-secondary">Back</a>
+</div>
+{% endblock %}

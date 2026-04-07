@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}My Subjects{% endblock %}
+{% block page_title %}My Subjects{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h3 class="mb-3">My Subjects</h3>
+
+    <div class="mb-3">
+        <p class="mb-1"><strong>Department:</strong> {{ student.department }}</p>
+        <p class="mb-1"><strong>Course:</strong> {{ student.course_fk }}</p>
+        <p class="mb-1"><strong>Semester:</strong> {{ student.semester }}</p>
+        <p class="mb-0"><strong>Section:</strong> {{ student.section|default:"-" }}</p>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Code</th>
+                    <th>Faculty</th>
+                    <th>Section</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in assignments %}
+                <tr>
+                    <td>{{ item.subject.name }}</td>
+                    <td>{{ item.subject.code }}</td>
+                    <td>{{ item.faculty.name }}</td>
+                    <td>{{ item.section|default:"-" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No subjects assigned yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
